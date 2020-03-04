@@ -1,0 +1,231 @@
+<!-- demo -->
+<!-- 
+<import name="btn" src="../components/btn.ux"></import>
+<template>
+  <div class="demo-page">
+    <btn btn-type="primary" title="primary" onclick-btn="clickBtn(0)"></btn>
+    <btn btn-type="warning" title="warning" onclick-btn="clickBtn(1)"></btn>
+    <btn btn-type="danger" title="danger" onclick-btn="clickBtn(2)"></btn>
+  </div>
+</template>
+<script>
+export default {
+  clickBtn(id) {
+    console.log(id)
+  }
+}
+</script>
+
+<style>
+.demo-page {
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+</style>
+
+<template>
+  <div class="doc-page">
+    <div class="page-title-wrap">
+        <text class="page-title">{{componentName}}</text>
+    </div>
+
+    <div class="item-container">
+      <div class="item-content">
+        <text class="txt">二维码扫描数据:{{qrCodeData}}</text>
+      </div>
+      <input type="button" class="btn"  onclick="qrCode" value="打开二维码扫描" />
+    </div>
+  </div>
+</template>
+
+<script>
+  import barcode from '@system.barcode'
+  import prompt from '@system.prompt'
+
+  export default {
+    private: {
+      componentName: 'qrcode',
+      qrCodeData: ''
+    },
+    onInit () {
+      this.$page.setTitleBar({text: 'Qrcode'})
+    },
+    qrCode () {
+      const self = this
+      barcode.scan({
+        success: function (ret) {
+          self.qrCodeData = ret.result
+        },
+        fail: function (erromsg, errocode) {
+          self.qrCodeData = errocode + ': ' + erromsg
+          console.info(`### barcode.scan ### ${errocode}: ${erromsg}`)
+          prompt.showToast({
+            message: `${errocode}: ${erromsg}`
+          })
+        }
+      })
+    }
+  }
+</script>
+
+<style>
+  @import '../../../common/css/common.css';
+
+  .item-container{
+    margin-bottom: 50px;
+    margin-right: 60px;
+    margin-left: 60px;
+    flex-direction: column;
+  }
+  .item-content{
+    flex-direction: column;
+    background-color: #ffffff;
+    padding: 30px;
+    margin-bottom: 100px;
+    align-items: flex-start;
+  }
+</style>
+
+ -->
+
+<template>
+  <div class="img1">
+  <div class="demo-page">
+    <text class="txt">{{qq1}}</text>
+    <text class="txt">{{qq2}}</text>
+    <text class="txt">{{qrCodeData}}</text>
+    <input type="button" class="btn" value="扫描条形码查询" onclick="qrCode" />
+    <input type="button" class="btn" value="输入药品名查询" onclick="routeInputSearch" />
+  </div>
+
+  </div>
+</template>
+
+<script>
+import router from '@system.router'
+import barcode from '@system.barcode'
+import prompt from '@system.prompt'
+import $fetch from '@system.fetch'
+export default {
+  props: {
+    btnType: {
+      type: String,
+      default: 'primary'
+    },
+    title: {
+      type: String,
+      default: '点击按键'
+    }
+  },
+  data: {
+    qq1: '',
+    qq2: '',
+    qrCodeData: '',
+    name: ''
+  },
+  search() {
+    this.qq2 = this.name
+    //const foo = require('json-loader!./drug.json')
+    //this.name = ''
+    $fetch.fetch({
+      url: 'http://api.tianapi.com/txapi/yaopin/index?key=361515a6e43be199d8f0b62e0fc15bb7&word=' + this.name,
+      method: 'GET'
+    }).then(response => {
+      const result = response.data
+      this.qrCodeData = result.data
+      //console.log(`success response, code: ${result.code}, data: ${result.data}`)
+    }).catch(error => {
+      //console.log(`Something Error: ${error}`)
+
+    })
+  },
+  find(e) {
+    this.name = e.text
+  },
+    qrCode() {
+    const self = this
+    self.qq1 = '二维码扫描结果:'
+    self.qq2 = '药物详情\n'
+    self.qrCodeData = ''
+    barcode.scan({
+      success: function (ret) {
+        self.qq1 += ret.result + '\n'
+        $fetch.fetch({
+          url: 'http://api.tianapi.com/txapi/barcode/index?key=361515a6e43be199d8f0b62e0fc15bb7&barcode' + ret.result,
+          method: 'GET'
+        }).then(response => {
+          const result = response.data
+          const aa = JSON.parse(result.data)// result.data string
+          self.qrCodeData += JSON.stringify(aa.newslist[0])
+          //console.log(`success response, code: ${result.code}, data: ${result.data}`)
+        }).catch(error => {
+          //console.log(`Something Error: ${error}`)
+
+        })
+
+      },
+      fail: function (erromsg, errocode) {
+        self.qrCodeData = errocode + ': ' + erromsg
+        console.info(`### barcode.scan ### ${errocode}: ${erromsg}`)
+        prompt.showToast({
+          message: `${errocode}: ${erromsg}`
+        })
+      }
+    })
+  },
+  routeInputSearch (){
+    router.push ({
+      uri: 'Search/InputSearch'
+    })
+  }
+
+}
+</script>
+
+<style>
+   .demo-page {
+     left:205px;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position:fixed;
+    top:300px;
+  }
+.btn {
+  width: 332px;
+  height: 101px;
+  margin-top: 75px;
+  font-size: 35px;
+  color: #fcfcfc;
+  background-image: url(../Common/button.png);
+}
+.img1 {
+    width: 100%;
+    height: 100%;
+    background-size: 100%;
+    /* 在水平方向和竖直方向上重复绘制 */
+   
+    /* 背景图片处于组件中央 */
+    background-position: center;
+    background-image: url('../Common/background2.png');
+    
+  }
+  .img2 {
+
+    width:332px;
+    height: 101px;
+    margin-top: 60px;
+    background-position: center;
+    background-image: url('../Common/button.png');
+  }
+.primary {
+  background-color: #09ba07;
+}
+.warning {
+  background-color: #f0a926;
+}
+.danger {
+  background-color: #e43e3e;
+}
+</style>

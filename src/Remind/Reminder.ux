@@ -1,0 +1,144 @@
+<template>
+  <div class="img1" >
+  <div class="doc-page">
+    
+   
+      
+      <div class="item-content">
+        <text class="title">小时：{{hour}}点</text>
+        <slider class="slider" min="0" max="23" onchange="setAlarmHour"></slider>
+      </div>
+      <div class="item-content">
+        <text class="title">分钟：{{minute}}分</text>
+        <slider class="slider" min="0" max="59" onchange="setAlarmMinute"></slider>
+      </div>
+      <div class="item-content">
+        <text class="title">药品名</text>
+        <input class="message" onchange="setAlarmMsg" value="{{message}}"></input>
+      </div>
+      <div class="item-content line">
+        <text class="title">震动</text>
+        <switch class="switch" checked="true" onchange="switchAlarmVibrate"></switch>
+      </div>
+      <div class="item-content line">
+        <text class="title">重复</text>
+        <switch class="switch" checked="false" onchange="switchAlarmRepeat"></switch>
+      </div>
+      <input type="button" class="btn alarm-btn" onclick="setAlarm" value="设置闹钟"/>
+    </div>
+
+  </div>
+</template>
+
+<style>
+  @import '../Common/css/common.css';
+
+
+  .item-content {
+    flex-direction: column;
+    width: 400px;
+    padding: 10px;
+     background-color: #f5dc4d;
+  }
+  .item-container .line {
+    flex-direction: row;
+  }
+  .item-content .title {
+    margin: 30px 0;
+    height: 30px;
+  }
+  .message {
+    width: 100%;
+    height: 60px;
+    border: 1px solid #3ec26a;
+    border-left-width: 0;
+    border-right-width: 0;
+  }
+  .alarm-btn {
+    margin-top: 50px;
+  }
+  .doc-page {
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position:fixed;
+    top:50px;
+  left:50px;
+  } 
+  .img1 {
+    width: 100%;
+    height: 100%;
+    background-size: 100%;
+    /* 在水平方向和竖直方向上重复绘制 */
+   
+    /* 背景图片处于组件中央 */
+    background-position: center;
+    background-image: url('../Common/background2.png');
+    
+  }
+</style>
+
+<script>
+  import alarm from '@system.alarm'
+  import media from '@system.media'
+  import prompt from '@system.prompt'
+
+  export default {
+    private: {
+      componentName: 'Alarm',
+      hour: 0,
+      minute: 0,
+      message: '请输入药品名',
+      vibrate: false,
+      repeat: false,
+      days: [],
+      provider: '',
+      ringtone: ''
+    },
+    onInit () {
+      this.$page.setTitleBar({text: '提醒用药'})
+
+      this.provider = alarm.getProvider()
+    },
+    setAlarm () {
+      const day = [new Date().getDay() - 1]
+
+      this.days = this.repeat ? [0, 1, 2, 3, 4, 5, 6] : day
+
+      alarm.setAlarm({
+        hour: this.hour,
+        minute: this.minute,
+        message: this.message,
+        vibrate: this.vibrate,
+        ringtone: this.ringtone,
+        days: this.days,
+        success() {
+          prompt.showToast({
+            message: '设置闹钟成功'
+          })
+        },
+        fail(data, code) {
+          console.log('set alarm failed：code' + code.code)
+        },
+         complete: function() {
+            console.log('handling complete')
+        }
+      })
+    },
+    setAlarmHour (e) {
+      this.hour = e.progress
+    },
+    setAlarmMinute (e) {
+      this.minute = e.progress
+    },
+    setAlarmMsg (e) {
+      this.message = e.value
+    },
+    switchAlarmVibrate (e) {
+      this.vibrate = e.checked
+    },
+    switchAlarmRepeat (e) {
+      this.repeat = e.checked
+    }
+  }
+</script>

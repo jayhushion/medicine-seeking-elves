@@ -1,0 +1,115 @@
+{
+  "package": "com.application.demo",
+  "name": "Demo1",
+  "versionName": "1.0.0",
+  "versionCode": "1",
+  "minPlatformVersion": "1020",
+  "icon": "/Common/logo.png",
+  "features": [
+    {
+      "name": "system.prompt"
+    },
+    {
+      "name": "system.router"
+    },
+    {
+      "name": "system.shortcut"
+    },
+    { 
+      "name": "system.barcode"
+    },
+    {
+      "name": "system.calendar"
+    },
+    {
+      "name": "system.alarm"
+    },
+    {
+      "name": "system.media"
+    },
+    {
+       "name": "system.fetch" 
+    }
+  ],
+  "permissions": [
+    {
+      "origin": "*"
+    }
+  ],
+  "config": {
+    "logLevel": "off"
+  },
+  "router": {
+    "entry": "Demo",
+    "pages": {
+      "Demo": {
+        "component": "index"
+      },
+      "Remind": {
+        "component": "Reminder"
+      },
+      "About": {
+        "component": "index"
+      },
+      "Catalog": {
+        "component": "index"
+      },
+      "Search": {
+        "component": "SearchSelect"
+      },
+      "Search/InputSearch": {
+        "component": "index"
+      },
+      "Search/Display":{
+        "component": "index"
+      }
+    },
+    "widgets": {
+      
+      "Remind": {
+        "name": "提醒用药",
+        "description": "",
+        "component": "Reminder",
+        "path": "/Remind",
+        "features": [
+          {
+            "name": "system.network"
+          }
+        ]
+      }
+    }
+  },
+  "display": {
+    "titleBarBackgroundColor": "#f2f2f2",
+    "titleBarTextColor": "#414141",
+    "menu": true,
+    "pages": {
+      "Demo": {
+        "titleBarText": "示例页",
+        "menu": false
+      },
+      "DemoDetail": {
+        "titleBarText": "详情页"
+      },
+      "Remind": {
+        "titleBarText": "提醒用药"
+      },
+      "Catalog": {
+        "titleBarText": "药品分类"
+      },
+      "About": {
+        "menu": false
+      },
+      "Search": {
+        "titleBarText": "查询药品"
+      },
+      "Search/InputSearch":{
+        "titleBarText":"输入药品名"
+      },
+      "Search/Display":{
+        "titleBarText":"药品详情"
+      }
+    
+    }
+  }
+}

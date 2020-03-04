@@ -1,0 +1,108 @@
+<import name="my-button" src="apex-ui/components/button/index"></import>
+<template>
+  <!-- template里只能有一个根节点 -->
+ <div class="img1" >
+   
+  
+  <div class="demo-page">
+  <div class="logo">
+  </div>
+    <input class="btn1" type="button" value="提醒用药" onclick="routeReminder"/>
+    <input class="btn1" type="button" value="药品分类" onclick="routeCatalog" />
+    <input class="btn1" type="button" value="查询药品" onclick="routeSearchSelect" />
+    
+  </div>
+  </div>
+
+</template>
+
+<script>
+import router from '@system.router'
+
+export default {
+  // 页面级组件的数据模型，影响传入数据的覆盖机制：private内定义的属性不允许被覆盖
+  private: {
+    title: '寻药精灵'
+  },
+  routeDetail () {
+    // 跳转到应用内的某个页面，router用法详见：文档->接口->页面路由
+    router.push ({
+      uri: '/DemoDetail'
+    })
+  },
+  routeReminder () {
+    // 跳转到应用内的某个页面，router用法详见：文档->接口->页面路由
+    router.push ({
+      uri: '/Remind'
+    })
+  },
+  routeCatalog () {
+    // 跳转到应用内的某个页面，router用法详见：文档->接口->页面路由
+    router.push ({
+      uri: '/Catalog'
+    })
+  },
+  routeSearchSelect () {
+    // 跳转到应用内的某个页面，router用法详见：文档->接口->页面路由
+    router.push ({
+      uri: '/Search'
+    })
+  }
+}
+</script>
+
+<style>
+  .demo-page {
+    left:205px;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position:fixed;
+    top:300px;
+
+  } 
+  .title {
+
+    font-size: 40px;
+
+  }
+  .btn1 {
+   
+    width: 332px;
+    height: 101px;
+    margin-top: 60px;
+   
+    font-size: 50px;
+    color: #fcfcfc;
+    background-image: url('../Common/button.png');
+
+  }
+  .img1 {
+    width: 100%;
+    height: 100%;
+    background-size: 100%;
+    /* 在水平方向和竖直方向上重复绘制 */
+   
+    /* 背景图片处于组件中央 */
+    background-position: center;
+    background-image: url('../Common/background2.png');
+    
+  }
+  .img2 {
+
+    width:332px;
+    height: 101px;
+    margin-top: 60px;
+    background-position: center;
+    background-image: url('../Common/button.png');
+  }
+  .logo{
+    width:100px;
+    height: 100px;
+position:fixed;
+top:100px;
+left:321px;
+    background-position: center;
+    background-image: url('../Common/logo.png');
+  }
+</style>
