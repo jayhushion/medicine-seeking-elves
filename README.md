@@ -1,6 +1,7 @@
 # Medicine Seeking Elves
+# 基于快应用的药品查询软件
 
-##项目根目录结构如下
+## 项目根目录结构如下
 ```
 ├── sign                      rpk包签名模块
 │   └── debug                 调试环境
